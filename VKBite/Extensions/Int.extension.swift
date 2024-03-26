@@ -1,9 +1,11 @@
 import Foundation
 
 extension Int {
-    func getMinSquareWithResidue() -> (square: Int, residue: Int) {
-        let squareRoot = Int(sqrt(Double(self)))
-        let residue = self - squareRoot * squareRoot
-        return (squareRoot, residue)
+    func getMaxRectangle() -> (height: Int, residue: Int) {
+        var rows = Int(sqrt(Double(2*self)))
+        rows = rows % 2 == 0 ? rows : rows - 1
+        let columns = rows / 2
+        let residue = self - (rows * columns)
+        return (rows, residue)
     }
 }

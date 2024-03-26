@@ -6,8 +6,8 @@ protocol SimulatorViewProtocol: AnyObject {
 
 class SimulatorViewController: UIViewController {
     var presenter: SimulatorPresenterProtocol?
-    var group: [[Human]] = [[]]
-
+    var group = Group(size: 0)
+    
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -17,7 +17,7 @@ class SimulatorViewController: UIViewController {
         collectionView.register(HumanCell.self, forCellWithReuseIdentifier: HumanCell.identifier)
         return collectionView
     }()
-
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +26,16 @@ class SimulatorViewController: UIViewController {
     }
 }
 
-// MARK: - Module 
+// MARK: - Module
 extension SimulatorViewController: SimulatorViewProtocol {
     func start(with configuration: Configuration) {
-        print("DEBUG: Current configuration = ", configuration)
+        group = Group(size: configuration.groupSize)
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
+        print(group.humans)
     }
 }
 
@@ -53,7 +59,7 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
             fatalError("DEBUG: Failed with custom cell bug")
         }
         
-        let human = group[indexPath.section][indexPath.item]
+        let human = group.humans[indexPath.section][indexPath.item]
         cell.configure(with: human)
         
         return cell

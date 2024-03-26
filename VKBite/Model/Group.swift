@@ -2,24 +2,35 @@ import Foundation
 
 struct Group {
     // MARK: Properties
-    var humans: [[Human]] = [[]]
+    var humans: [[Human]] = []
     
     // MARK: Initialize
     init(size: Int) {
-        self.humans = getGroup(with: size.getMinSquareWithResidue())
+        self.humans = getGroup(with: size.getMaxRectangle())
     }
 }
 
 // MARK: - Methods
 private extension Group {
-    func getGroup(with pattern: (square: Int, residue: Int)) -> [[Human]] {
-        var matrix: [[Human]] = [[]]
+    func getGroup(with pattern: (height: Int, residue: Int)) -> [[Human]] {
+        var matrix: [[Human]] = []
+        
+        guard pattern.height != 0 else { return matrix }
+        
+        var height = pattern.height
+        let width = height / 2
+        var residue = pattern.residue
+        
+        while residue > width {
+            residue -= width
+            height += 1
+        }
         
         // Setup square
-        for rowIterator in 0..<pattern.square {
+        for rowIterator in 0..<height {
             var row: [Human] = []
             
-            for columnIterator in 0..<pattern.square {
+            for columnIterator in 0..<width {
                 let human = Human(id: UUID())
                 
                 if rowIterator != 0 {
@@ -28,22 +39,10 @@ private extension Group {
                     human.append(neighbor: topNeighbor.id)
                 }
                 
-                if rowIterator != pattern.square - 1 {
-                    let bottomNeighbor = matrix[rowIterator + 1][columnIterator]
-                    bottomNeighbor.append(neighbor: human.id)
-                    human.append(neighbor: bottomNeighbor.id)
-                }
-                
                 if columnIterator != 0 {
-                    let leftNeighbor = matrix[rowIterator][columnIterator - 1]
+                    let leftNeighbor = row[columnIterator - 1]
                     leftNeighbor.append(neighbor: human.id)
                     human.append(neighbor: leftNeighbor.id)
-                }
-                
-                if columnIterator != pattern.square - 1 {
-                    let rightNeighbor = matrix[rowIterator][columnIterator + 1]
-                    rightNeighbor.append(neighbor: human.id)
-                    human.append(neighbor: rightNeighbor.id)
                 }
                 
                 row.append(human)
@@ -53,38 +52,32 @@ private extension Group {
         }
         
         // Setup residue
-        var residue: [Human] = []
+        var residueRow: [Human] = []
         
-        for iterator in 0..<pattern.residue {
+        for iterator in 0..<residue {
             let human = Human(id: UUID())
             
             if iterator != 0 {
-                let leftNeighbor = residue[iterator - 1]
+                let leftNeighbor = residueRow[iterator - 1]
                 leftNeighbor.append(neighbor: human.id)
                 human.append(neighbor: leftNeighbor.id)
             }
             
-            if iterator != pattern.residue - 1 {
-                let rightNeighbor = residue[iterator + 1]
-                rightNeighbor.append(neighbor: human.id)
-                human.append(neighbor: rightNeighbor.id)
-            }
-            
-            residue.append(human)
+            residueRow.append(human)
         }
         
         // Merge square and residue
-        let squareLastRow = matrix[pattern.square - 1]
+        let squareLastRow = matrix[height - 1]
         
-        for iterator in 0..<residue.count {
+        for iterator in 0..<residueRow.count {
             let topHuman = squareLastRow[iterator]
-            let bottomHuman = residue[iterator]
+            let bottomHuman = residueRow[iterator]
             
             topHuman.append(neighbor: bottomHuman.id)
             bottomHuman.append(neighbor: topHuman.id)
         }
         
-        matrix.append(residue)
+        matrix.append(residueRow)
         
         return matrix
     }
