@@ -88,7 +88,7 @@ class HomeViewController: UIViewController, HomeViewProtocol {
     }
 }
 
-// MARK: Setup
+// MARK: - Setup
 private extension HomeViewController {
     func initialize() {
         view.backgroundColor = .white
