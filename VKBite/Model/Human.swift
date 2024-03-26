@@ -1,26 +1,14 @@
 import Foundation
 
 class Human {
-    // MARK: Properties
-    let id: UUID
-    var neighbors = Set<UUID>()
+    let position: Position
     var isInfected = false
     
-    // MARK: Initialize
-    init(id: UUID) {
-        self.id = id
+    init(x: Int, y: Int) {
+        self.position = Position(x: x, y: y)
     }
     
-    // MARK: Methods
     func setInfected() {
         isInfected = true
-    }
-    
-    func append(neighbor: UUID) {
-        neighbors.insert(neighbor)
-    }
-    
-    func getNeighbors(limit: Int) -> [UUID] {
-        Array(neighbors.prefix(limit))
     }
 }

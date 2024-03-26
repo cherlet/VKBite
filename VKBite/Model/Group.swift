@@ -1,21 +1,23 @@
 import Foundation
 
 struct Group {
-    // MARK: Properties
     var humans: [[Human]] = []
+    var information = (bottomRightCorner: Position(x: 0, y: 0), residue: 0)
     
-    // MARK: Initialize
+    
     init(size: Int) {
-        self.humans = getGroup(with: size.getMaxRectangle())
+        let response = getGroup(with: size.getMaxRectangle())
+        self.humans = response.humans
+        self.information = (response.bottomRightCorner, response.residue)
     }
 }
 
 // MARK: - Methods
 private extension Group {
-    func getGroup(with pattern: (height: Int, residue: Int)) -> [[Human]] {
+    func getGroup(with pattern: (height: Int, residue: Int)) -> (humans: [[Human]], bottomRightCorner: Position, residue: Int) {
         var matrix: [[Human]] = []
         
-        guard pattern.height != 0 else { return matrix }
+        guard pattern.height != 0 else { return (matrix, Position(x: 0, y: 0), 0) }
         
         var height = pattern.height
         let width = height / 2
@@ -26,59 +28,31 @@ private extension Group {
             height += 1
         }
         
-        // Setup square
+        // Setup rectangle
         for rowIterator in 0..<height {
             var row: [Human] = []
             
             for columnIterator in 0..<width {
-                let human = Human(id: UUID())
-                
-                if rowIterator != 0 {
-                    let topNeighbor = matrix[rowIterator - 1][columnIterator]
-                    topNeighbor.append(neighbor: human.id)
-                    human.append(neighbor: topNeighbor.id)
-                }
-                
-                if columnIterator != 0 {
-                    let leftNeighbor = row[columnIterator - 1]
-                    leftNeighbor.append(neighbor: human.id)
-                    human.append(neighbor: leftNeighbor.id)
-                }
-                
+                let human = Human(x: columnIterator, y: rowIterator)
                 row.append(human)
             }
             
             matrix.append(row)
         }
         
+        let bottomRightCorner = Position(x: width - 1, y: height - 1)
+        
         // Setup residue
         var residueRow: [Human] = []
         
         for iterator in 0..<residue {
-            let human = Human(id: UUID())
-            
-            if iterator != 0 {
-                let leftNeighbor = residueRow[iterator - 1]
-                leftNeighbor.append(neighbor: human.id)
-                human.append(neighbor: leftNeighbor.id)
-            }
-            
+            let human = Human(x: iterator, y: height)
             residueRow.append(human)
         }
         
-        // Merge square and residue
-        let squareLastRow = matrix[height - 1]
-        
-        for iterator in 0..<residueRow.count {
-            let topHuman = squareLastRow[iterator]
-            let bottomHuman = residueRow[iterator]
-            
-            topHuman.append(neighbor: bottomHuman.id)
-            bottomHuman.append(neighbor: topHuman.id)
-        }
-        
+        // Rectangle + residue -> return
         matrix.append(residueRow)
         
-        return matrix
+        return (matrix, bottomRightCorner, residue)
     }
 }

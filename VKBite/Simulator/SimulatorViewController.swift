@@ -35,7 +35,7 @@ extension SimulatorViewController: SimulatorViewProtocol {
             self.collectionView.reloadData()
         }
         
-        print(group.humans)
+        print(group.humans.map { $0.map { $0.position}})
     }
 }
 
