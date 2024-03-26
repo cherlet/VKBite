@@ -18,6 +18,10 @@
 		07B981D12BB2E9910022E146 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CC2BB2E9910022E146 /* HomeRouter.swift */; };
 		07B981D22BB2E9910022E146 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CD2BB2E9910022E146 /* HomeViewController.swift */; };
 		07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D52BB2F2150022E146 /* UITextField.extension.swift */; };
+		07B981DD2BB2FEA50022E146 /* SimulatorModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */; };
+		07B981DE2BB2FEA50022E146 /* SimulatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */; };
+		07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */; };
+		07B981E02BB2FEA50022E146 /* SimulatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +38,10 @@
 		07B981CC2BB2E9910022E146 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		07B981CD2BB2E9910022E146 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		07B981D52BB2F2150022E146 /* UITextField.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.extension.swift; sourceTree = "<group>"; };
+		07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorModuleBuilder.swift; sourceTree = "<group>"; };
+		07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorPresenter.swift; sourceTree = "<group>"; };
+		07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorRouter.swift; sourceTree = "<group>"; };
+		07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +74,7 @@
 		07B981AB2BB2E3B80022E146 /* VKBite */ = {
 			isa = PBXGroup;
 			children = (
+				07B981D72BB2FE790022E146 /* Simulator */,
 				07B981C92BB2E9780022E146 /* Home */,
 				07B981C22BB2E5080022E146 /* Model */,
 				07B981D42BB2F1FA0022E146 /* Extensions */,
@@ -120,6 +129,17 @@
 				07B981D52BB2F2150022E146 /* UITextField.extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		07B981D72BB2FE790022E146 /* Simulator */ = {
+			isa = PBXGroup;
+			children = (
+				07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */,
+				07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */,
+				07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */,
+				07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */,
+			);
+			path = Simulator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,11 +213,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				07B981D02BB2E9910022E146 /* HomePresenter.swift in Sources */,
+				07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */,
 				07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */,
 				07B981CF2BB2E9910022E146 /* HomeModuleBuilder.swift in Sources */,
 				07B981C82BB2E89A0022E146 /* Configuration.swift in Sources */,
+				07B981DD2BB2FEA50022E146 /* SimulatorModuleBuilder.swift in Sources */,
 				07B981AD2BB2E3B80022E146 /* AppDelegate.swift in Sources */,
 				07B981D22BB2E9910022E146 /* HomeViewController.swift in Sources */,
+				07B981E02BB2FEA50022E146 /* SimulatorViewController.swift in Sources */,
+				07B981DE2BB2FEA50022E146 /* SimulatorPresenter.swift in Sources */,
 				07B981D12BB2E9910022E146 /* HomeRouter.swift in Sources */,
 				07B981AF2BB2E3B80022E146 /* SceneDelegate.swift in Sources */,
 				07B981C62BB2E8040022E146 /* Human.swift in Sources */,

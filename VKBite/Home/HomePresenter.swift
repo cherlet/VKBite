@@ -1,4 +1,5 @@
 protocol HomePresenterProtocol: AnyObject {
+    func didSetting(with configuration: Configuration)
 }
 
 class HomePresenter {
@@ -11,4 +12,7 @@ class HomePresenter {
 }
 
 extension HomePresenter: HomePresenterProtocol {
+    func didSetting(with configuration: Configuration) {
+        router.openSimulator(with: configuration)
+    }
 }

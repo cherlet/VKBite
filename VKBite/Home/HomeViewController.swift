@@ -1,9 +1,8 @@
 import UIKit
 
-protocol HomeViewProtocol: AnyObject {
-}
+protocol HomeViewProtocol: AnyObject {}
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, HomeViewProtocol {
     // MARK: Properties
     var presenter: HomePresenterProtocol?
     let defaultConfiguration = Configuration(groupSize: 100, infectionFactor: 3, timestamp: 1)
@@ -78,6 +77,7 @@ class HomeViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         button.setTitle("START", for: .normal)
         button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(handleStart), for: .touchUpInside)
         return button
     }()
 
@@ -86,10 +86,6 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         initialize()
     }
-}
-
-// MARK: Module 
-extension HomeViewController: HomeViewProtocol {
 }
 
 // MARK: Setup
@@ -142,5 +138,24 @@ private extension HomeViewController {
             startButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             startButton.topAnchor.constraint(equalTo: timestampTextField.bottomAnchor, constant: 20)
         ])
+    }
+}
+
+// MARK: - Actions
+private extension HomeViewController {
+    @objc func handleStart() {
+        let fields = [groupSizeTextField, infectionFactorTextField, timestampTextField]
+        
+        fields.forEach {
+            $0.handleNonIntegerInput(for: self)
+        }
+        
+        let groupSize = groupSizeTextField.getInteger() ?? defaultConfiguration.groupSize
+        let infectionFactor = infectionFactorTextField.getInteger() ?? defaultConfiguration.infectionFactor
+        let timestamp = timestampTextField.getInteger() ?? defaultConfiguration.timestamp
+        
+        let configuration = Configuration(groupSize: groupSize, infectionFactor: infectionFactor, timestamp: timestamp)
+        
+        presenter?.didSetting(with: configuration)
     }
 }
