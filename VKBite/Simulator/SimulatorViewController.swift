@@ -8,12 +8,15 @@ class SimulatorViewController: UIViewController {
     var presenter: SimulatorPresenterProtocol?
     var group = Group(size: 0)
     
+    private var currentScale: CGFloat = 1.0
+    
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.minimumInteritemSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        let collectionView = UICollectionView(frame: .infinite, collectionViewLayout: layout)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         collectionView.register(HumanCell.self, forCellWithReuseIdentifier: HumanCell.identifier)
         return collectionView
     }()
@@ -34,24 +37,47 @@ extension SimulatorViewController: SimulatorViewProtocol {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
-        
-        print(group.humans.map { $0.map { $0.position}})
     }
 }
 
 // MARK: - Setup
 private extension SimulatorViewController {
     func initialize() {
-        view.backgroundColor = .green
+        view.backgroundColor = .white
+        setupLayout()
+        setupPinchGestureRecognizer()
+        
         collectionView.delegate = self
         collectionView.dataSource = self
+    }
+    
+    func setupLayout() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
+    private func setupPinchGestureRecognizer() {
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        pinchGesture.delegate = self
+        self.view.addGestureRecognizer(pinchGesture)
     }
 }
 
 // MARK: - CollectionView
 extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        group.humans.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        0
+        group.humans[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -64,4 +90,28 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
         
         return cell
     }
+}
+
+// MARK: - Actions
+extension SimulatorViewController: UIGestureRecognizerDelegate {
+    @objc private func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
+        guard gestureRecognizer.view != nil else { return }
+
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let scale = gestureRecognizer.scale * currentScale
+            let scaledTransform = CGAffineTransform(scaleX: scale, y: scale)
+            
+            if scale <= 2.0, scale >= 0.8 {
+                collectionView.transform = scaledTransform
+            }
+        } else if gestureRecognizer.state == .ended {
+            currentScale = 1.0
+            let scaledTransform = CGAffineTransform(scaleX: currentScale, y: currentScale)
+            
+            UIView.animate(withDuration: 0.15) {
+                self.collectionView.transform = scaledTransform
+            }
+        }
+    }
+
 }

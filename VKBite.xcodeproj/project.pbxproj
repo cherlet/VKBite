@@ -24,7 +24,6 @@
 		07B981E02BB2FEA50022E146 /* SimulatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */; };
 		07B981E42BB304FA0022E146 /* HumanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981E32BB304FA0022E146 /* HumanCell.swift */; };
 		07B981E62BB307560022E146 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981E52BB307560022E146 /* Group.swift */; };
-		07B981E82BB30F600022E146 /* Int.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981E72BB30F600022E146 /* Int.extension.swift */; };
 		07FF4F992BB35D7A003ED9A4 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FF4F982BB35D7A003ED9A4 /* Position.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +47,6 @@
 		07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorViewController.swift; sourceTree = "<group>"; };
 		07B981E32BB304FA0022E146 /* HumanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanCell.swift; sourceTree = "<group>"; };
 		07B981E52BB307560022E146 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
-		07B981E72BB30F600022E146 /* Int.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.extension.swift; sourceTree = "<group>"; };
 		07FF4F982BB35D7A003ED9A4 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,7 +136,6 @@
 			isa = PBXGroup;
 			children = (
 				07B981D52BB2F2150022E146 /* UITextField.extension.swift */,
-				07B981E72BB30F600022E146 /* Int.extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -236,7 +233,6 @@
 				07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */,
 				07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */,
 				07B981E62BB307560022E146 /* Group.swift in Sources */,
-				07B981E82BB30F600022E146 /* Int.extension.swift in Sources */,
 				07B981CF2BB2E9910022E146 /* HomeModuleBuilder.swift in Sources */,
 				07B981C82BB2E89A0022E146 /* Configuration.swift in Sources */,
 				07FF4F992BB35D7A003ED9A4 /* Position.swift in Sources */,

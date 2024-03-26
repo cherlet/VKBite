@@ -6,7 +6,7 @@ struct Group {
     
     
     init(size: Int) {
-        let response = getGroup(with: size.getMaxRectangle())
+        let response = getGroup(of: size)
         self.humans = response.humans
         self.information = (response.bottomRightCorner, response.residue)
     }
@@ -14,19 +14,14 @@ struct Group {
 
 // MARK: - Methods
 private extension Group {
-    func getGroup(with pattern: (height: Int, residue: Int)) -> (humans: [[Human]], bottomRightCorner: Position, residue: Int) {
+    func getGroup(of size: Int) -> (humans: [[Human]], bottomRightCorner: Position, residue: Int) {
         var matrix: [[Human]] = []
         
-        guard pattern.height != 0 else { return (matrix, Position(x: 0, y: 0), 0) }
+        guard size != 0 else { return (matrix, Position(x: 0, y: 0), 0) }
         
-        var height = pattern.height
-        let width = height / 2
-        var residue = pattern.residue
-        
-        while residue > width {
-            residue -= width
-            height += 1
-        }
+        var height = size / 6
+        let width = 6
+        var residue = size - (width * height)
         
         // Setup rectangle
         for rowIterator in 0..<height {
