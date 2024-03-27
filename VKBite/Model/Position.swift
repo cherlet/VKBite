@@ -21,7 +21,26 @@ extension Position {
     }
     
     func getNeighborPosition(on position: NeighborPosition, bottomRightCorner: Position, residue: Int) -> Position? {
-        let residueLine = Array(0..<residue)
+        if y > bottomRightCorner.y {
+            switch position {
+            case .top:
+                return Position(x: x, y: y - 1)
+            case .topRight:
+                guard x < bottomRightCorner.x else { return nil }
+                return Position(x: x + 1, y: y - 1)
+            case .right:
+                guard x < residue - 1 else { return nil }
+                return Position(x: x + 1, y: y)
+            case .left:
+                guard x > 0 else { return nil }
+                return Position(x: x - 1, y: y)
+            case .topLeft:
+                guard x > 0 else { return nil }
+                return Position(x: x - 1, y: y - 1)
+            default:
+                return nil
+            }
+        }
         
         switch position {
         case .top:
@@ -31,16 +50,16 @@ extension Position {
             guard y > 0, x < bottomRightCorner.x else { return nil }
             return Position(x: x + 1, y: y - 1)
         case .right:
-            guard x < bottomRightCorner.x else { return nil}
+            guard x < bottomRightCorner.x else { return nil }
             return Position(x: x + 1, y: y)
         case .bottomRight:
-            guard (y < bottomRightCorner.y && x < bottomRightCorner.x) || (residueLine.firstIndex(of: x + 1) != nil && y < bottomRightCorner.y + 1) else { return nil}
+            guard y < bottomRightCorner.y && x < bottomRightCorner.x else { return nil }
             return Position(x: x + 1, y: y + 1)
         case .bottom:
-            guard y < bottomRightCorner.y || (residueLine.firstIndex(of: x) != nil && y < bottomRightCorner.y + 1) else { return nil }
+            guard y < bottomRightCorner.y else { return nil }
             return Position(x: x, y: y + 1)
         case .bottomLeft:
-            guard (y < bottomRightCorner.y && x > 0) || (residueLine.firstIndex(of: x - 1) != nil && y < bottomRightCorner.y + 1) else { return nil }
+            guard (y < bottomRightCorner.y && x > 0) else { return nil }
             return Position(x: x - 1, y: y + 1)
         case .left:
             guard x > 0 else { return nil }

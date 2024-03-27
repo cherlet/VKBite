@@ -94,7 +94,7 @@ private extension HomeViewController {
         setupLayout()
     }
     
-    private func setupLayout() {
+    func setupLayout() {
         [appLabel, groupSizeLabel, groupSizeTextField, infectionFactorLabel, infectionFactorTextField, timestampLabel, timestampTextField, startButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)

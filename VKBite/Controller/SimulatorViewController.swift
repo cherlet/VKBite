@@ -4,6 +4,16 @@ class SimulatorViewController: UIViewController {
     // MARK: Properties
     private let simulationQueue = DispatchQueue(label: "simulationQueue")
     private var simulationTimer: DispatchSourceTimer?
+    private var swipedIndexes = Set<IndexPath>()
+    private var isSwipeMode: Bool = false {
+        didSet {
+            if isSwipeMode {
+                collectionView.isScrollEnabled = false
+            } else {
+                collectionView.isScrollEnabled = true
+            }
+        }
+    }
     
     var configuration: Configuration
     var group: Group
@@ -35,17 +45,18 @@ class SimulatorViewController: UIViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialize()
+        setup()
         startSimulation()
     }
 }
 
 // MARK: - Setup
 private extension SimulatorViewController {
-    func initialize() {
+    func setup() {
         view.backgroundColor = .white
         setupLayout()
         setupPinchGestureRecognizer()
+        setupLongPressGestureRecognizer()
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -63,10 +74,16 @@ private extension SimulatorViewController {
         ])
     }
     
-    private func setupPinchGestureRecognizer() {
+    func setupPinchGestureRecognizer() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         pinchGesture.delegate = self
         self.view.addGestureRecognizer(pinchGesture)
+    }
+    
+    private func setupLongPressGestureRecognizer() {
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPressGesture.delegate = self
+        collectionView.addGestureRecognizer(longPressGesture)
     }
 }
 
@@ -92,9 +109,6 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let human = group.humans[indexPath.section][indexPath.item]
-        infectedHumanPositions.insert(human.position)
-        
         simulationQueue.async {
             self.handleCellSelection(at: indexPath)
         }
@@ -103,9 +117,9 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
 
 // MARK: - Simulation Methods
 private extension SimulatorViewController {
-    private func startSimulation() {
+    func startSimulation() {
         let timestampInSeconds = TimeInterval(configuration.timestamp)
-
+        
         simulationTimer = DispatchSource.makeTimerSource(queue: simulationQueue)
         simulationTimer?.schedule(deadline: .now(), repeating: timestampInSeconds)
         simulationTimer?.setEventHandler { [weak self] in
@@ -113,8 +127,8 @@ private extension SimulatorViewController {
         }
         simulationTimer?.resume()
     }
-
-    private func concurrentUpdate() {
+    
+    func concurrentUpdate() {
         DispatchQueue.global().async {
             for infectedPosition in self.infectedHumanPositions {
                 var infectionFactor = self.configuration.infectionFactor
@@ -153,10 +167,10 @@ private extension SimulatorViewController {
 
 // MARK: - Actions
 extension SimulatorViewController: UIGestureRecognizerDelegate {
-    private func handleCellSelection(at indexPath: IndexPath) {
-        let selectedHuman = group.humans[indexPath.section][indexPath.item]
-        selectedHuman.setInfected()
-        group.humans[indexPath.section][indexPath.item] = selectedHuman
+    @objc private func handleCellSelection(at indexPath: IndexPath) {
+        let human = group.humans[indexPath.section][indexPath.item]
+        human.setInfected()
+        infectedHumanPositions.insert(human.position)
         
         DispatchQueue.main.async {
             self.collectionView.reloadItems(at: [indexPath])
@@ -165,7 +179,7 @@ extension SimulatorViewController: UIGestureRecognizerDelegate {
     
     @objc private func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
         guard gestureRecognizer.view != nil else { return }
-
+        
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let scale = gestureRecognizer.scale * 1.0
             let scaledTransform = CGAffineTransform(scaleX: scale, y: scale)
@@ -178,6 +192,51 @@ extension SimulatorViewController: UIGestureRecognizerDelegate {
             
             UIView.animate(withDuration: 0.15) {
                 self.collectionView.transform = scaledTransform
+            }
+        }
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            isSwipeMode = true
+            highlightCell(at: indexPath)
+            swipedIndexes.insert(indexPath)
+        case .changed:
+            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            isSwipeMode = true
+            highlightCell(at: indexPath)
+            swipedIndexes.insert(indexPath)
+        default:
+            collectionView.cancelInteractiveMovement()
+            isSwipeMode = false
+            resetCells(at: swipedIndexes)
+            swipedIndexes.forEach { indexPath in
+                simulationQueue.async {
+                    self.handleCellSelection(at: indexPath)
+                }
+            }
+            swipedIndexes.removeAll()
+        }
+    }
+    
+    private func highlightCell(at indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            UIView.animate(withDuration: 0.2) {
+                cell.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                cell.contentView.backgroundColor = .red
+            }
+        }
+    }
+    
+    private func resetCells(at indexPaths: Set<IndexPath>) {
+        for indexPath in indexPaths {
+            if let cell = collectionView.cellForItem(at: indexPath) {
+                UIView.animate(withDuration: 0.2) {
+                    cell.transform = .identity
+                    cell.contentView.backgroundColor = .clear
+                }
             }
         }
     }
