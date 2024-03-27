@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0767E3782BB4522300337215 /* Set.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0767E3772BB4522300337215 /* Set.extension.swift */; };
 		07B981AD2BB2E3B80022E146 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981AC2BB2E3B80022E146 /* AppDelegate.swift */; };
 		07B981AF2BB2E3B80022E146 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981AE2BB2E3B80022E146 /* SceneDelegate.swift */; };
 		07B981B62BB2E3BA0022E146 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07B981B52BB2E3BA0022E146 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0767E3772BB4522300337215 /* Set.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.extension.swift; sourceTree = "<group>"; };
 		07B981A92BB2E3B80022E146 /* VKBite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKBite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07B981AC2BB2E3B80022E146 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07B981AE2BB2E3B80022E146 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				07B981D52BB2F2150022E146 /* UITextField.extension.swift */,
+				0767E3772BB4522300337215 /* Set.extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07B981D02BB2E9910022E146 /* HomePresenter.swift in Sources */,
+				0767E3782BB4522300337215 /* Set.extension.swift in Sources */,
 				07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */,
 				07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */,
 				07B981E62BB307560022E146 /* Group.swift in Sources */,

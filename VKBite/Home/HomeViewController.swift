@@ -75,7 +75,7 @@ class HomeViewController: UIViewController, HomeViewProtocol {
         button.backgroundColor = .systemBlue
         button.titleLabel?.textColor = .white
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.setTitle("START", for: .normal)
+        button.setTitle("RUN SIMULATION", for: .normal)
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(handleStart), for: .touchUpInside)
         return button

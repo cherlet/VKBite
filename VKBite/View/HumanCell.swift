@@ -36,8 +36,8 @@ class HumanCell: UICollectionViewCell {
             circleImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-
     
-    func configure(with human: Human) {
+    func configure(status isInfected: Bool) {
+        circleImage.tintColor = isInfected ? .red : .green
     }
 }

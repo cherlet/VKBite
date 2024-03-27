@@ -19,9 +19,9 @@ private extension Group {
         
         guard size != 0 else { return (matrix, Position(x: 0, y: 0), 0) }
         
-        var height = size / 6
+        let height = size / 6
         let width = 6
-        var residue = size - (width * height)
+        let residue = size - (width * height)
         
         // Setup rectangle
         for rowIterator in 0..<height {

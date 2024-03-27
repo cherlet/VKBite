@@ -5,10 +5,16 @@ protocol SimulatorViewProtocol: AnyObject {
 }
 
 class SimulatorViewController: UIViewController {
-    var presenter: SimulatorPresenterProtocol?
-    var group = Group(size: 0)
-    
+    // MARK: Properties
+    private let simulationQueue = DispatchQueue(label: "simulationQueue")
+    private var simulationTimer: DispatchSourceTimer?
     private var currentScale: CGFloat = 1.0
+    
+    var presenter: SimulatorPresenterProtocol?
+    var configuration: Configuration?
+    
+    var group = Group(size: 0)
+    var infectedHumanPositions = Set<Position>()
     
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -32,11 +38,14 @@ class SimulatorViewController: UIViewController {
 // MARK: - Module
 extension SimulatorViewController: SimulatorViewProtocol {
     func start(with configuration: Configuration) {
+        self.configuration = configuration
         group = Group(size: configuration.groupSize)
         
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
+        
+        startSimulation()
     }
 }
 
@@ -86,14 +95,85 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         
         let human = group.humans[indexPath.section][indexPath.item]
-        cell.configure(with: human)
+        cell.configure(status: human.isInfected)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let human = group.humans[indexPath.section][indexPath.item]
+        infectedHumanPositions.insert(human.position)
+        
+        simulationQueue.async {
+            self.handleCellSelection(at: indexPath)
+        }
+    }
+}
+
+// MARK: - Simulation Methods
+private extension SimulatorViewController {
+    private func startSimulation() {
+        guard let configuration = configuration else { return }
+        
+        let timestampInSeconds = TimeInterval(configuration.timestamp)
+
+        simulationTimer = DispatchSource.makeTimerSource(queue: simulationQueue)
+        simulationTimer?.schedule(deadline: .now(), repeating: timestampInSeconds)
+        simulationTimer?.setEventHandler { [weak self] in
+            self?.concurrentUpdate()
+        }
+        simulationTimer?.resume()
+    }
+
+    private func concurrentUpdate() {
+        DispatchQueue.global().async {
+            for infectedPosition in self.infectedHumanPositions {
+                var infectionFactor = self.configuration?.infectionFactor ?? 0
+                var availableNeighbors = infectedPosition.getAvailableNeighbors(bottomRightCorner: self.group.information.bottomRightCorner,
+                                                                                residue: self.group.information.residue)
+                
+                // All the neighbors of current human are infected
+                if self.infectedHumanPositions.containsAll(availableNeighbors) {
+                    self.infectedHumanPositions.remove(infectedPosition)
+                    continue
+                }
+                
+                while !availableNeighbors.isEmpty, infectionFactor > 0 {
+                    let randomIndex = Int.random(in: 0..<availableNeighbors.count)
+                    let randomVictim = availableNeighbors[randomIndex]
+                    
+                    // Making sure that two neighbors don't infect the same one
+                    if !self.infectedHumanPositions.contains(randomVictim) {
+                        self.infectedHumanPositions.insert(randomVictim)
+                        infectionFactor -= 1
+                        
+                        let indexPath = IndexPath(item: randomVictim.x, section: randomVictim.y)
+                        self.group.humans[indexPath.section][indexPath.item].setInfected()
+                        
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadItems(at: [indexPath])
+                        }
+                    }
+                    
+                    availableNeighbors.remove(at: randomIndex)
+                }
+            }
+        }
     }
 }
 
 // MARK: - Actions
 extension SimulatorViewController: UIGestureRecognizerDelegate {
+    private func handleCellSelection(at indexPath: IndexPath) {
+        let selectedHuman = group.humans[indexPath.section][indexPath.item]
+        selectedHuman.setInfected()
+        group.humans[indexPath.section][indexPath.item] = selectedHuman
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadItems(at: [indexPath])
+        }
+    }
+    
     @objc private func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
         guard gestureRecognizer.view != nil else { return }
 
@@ -113,5 +193,4 @@ extension SimulatorViewController: UIGestureRecognizerDelegate {
             }
         }
     }
-
 }
