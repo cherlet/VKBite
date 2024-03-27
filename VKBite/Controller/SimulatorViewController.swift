@@ -143,6 +143,10 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
             self.handleCellSelection(at: indexPath)
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 30, height: 30)
+    }
 }
 
 // MARK: - Simulation Methods

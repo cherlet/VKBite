@@ -6,7 +6,7 @@ class HumanCell: UICollectionViewCell {
     
     // MARK: UI Elements
     private lazy var circleImage: UIImageView = {
-        let image = UIImage(systemName: "circle.fill")
+        let image = UIImage(systemName: "person.crop.circle")
         let imageView = UIImageView(image: image)
         imageView.tintColor = .green
         return imageView
@@ -15,6 +15,7 @@ class HumanCell: UICollectionViewCell {
     // MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.layer.cornerRadius = 24
         setupLayout()
     }
     
@@ -38,6 +39,8 @@ class HumanCell: UICollectionViewCell {
     }
     
     func configure(status isInfected: Bool) {
-        circleImage.tintColor = isInfected ? .red : .green
+        let imageName = isInfected ? "person.crop.circle.badge.minus" : "person.crop.circle"
+        circleImage.tintColor = isInfected ? .red : .systemBlue
+        circleImage.image = UIImage(systemName: imageName)
     }
 }
