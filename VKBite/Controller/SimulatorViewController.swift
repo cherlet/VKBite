@@ -23,6 +23,7 @@ class SimulatorViewController: UIViewController {
     init(with configuration: Configuration) {
         self.configuration = configuration
         self.group = Group(size: configuration.groupSize)
+        self.statusBar = StatusBar(groupSize: configuration.groupSize)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,11 +36,25 @@ class SimulatorViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
-        let collectionView = UICollectionView(frame: .infinite, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(HumanCell.self, forCellWithReuseIdentifier: HumanCell.identifier)
         return collectionView
     }()
+    
+    private lazy var stopButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("STOP", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(stopSimulation), for: .touchUpInside)
+        return button
+    }()
+
+    
+    private let statusBar: StatusBar
     
     
     // MARK: Lifecycle
@@ -63,11 +78,26 @@ private extension SimulatorViewController {
     }
     
     func setupLayout() {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
+        [statusBar, collectionView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+        
+        stopButton.translatesAutoresizingMaskIntoConstraints = false
+        statusBar.addSubview(stopButton)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            stopButton.widthAnchor.constraint(equalToConstant: 64),
+            stopButton.heightAnchor.constraint(equalToConstant: 32),
+            stopButton.leadingAnchor.constraint(equalTo: statusBar.leadingAnchor, constant: 20),
+            stopButton.bottomAnchor.constraint(equalTo: statusBar.bottomAnchor, constant: -16),
+            
+            statusBar.heightAnchor.constraint(equalToConstant: 120),
+            statusBar.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: statusBar.bottomAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -134,12 +164,7 @@ private extension SimulatorViewController {
                 var infectionFactor = self.configuration.infectionFactor
                 var availableNeighbors = infectedPosition.getAvailableNeighbors(bottomRightCorner: self.group.information.bottomRightCorner,
                                                                                 residue: self.group.information.residue)
-                
-                // All the neighbors of current human are infected
-                if self.infectedHumanPositions.containsAll(availableNeighbors) {
-                    self.infectedHumanPositions.remove(infectedPosition)
-                    continue
-                }
+
                 
                 while !availableNeighbors.isEmpty, infectionFactor > 0 {
                     let randomIndex = Int.random(in: 0..<availableNeighbors.count)
@@ -155,6 +180,7 @@ private extension SimulatorViewController {
                         
                         DispatchQueue.main.async {
                             self.collectionView.reloadItems(at: [indexPath])
+                            self.statusBar.clock()
                         }
                     }
                     
@@ -167,6 +193,11 @@ private extension SimulatorViewController {
 
 // MARK: - Actions
 extension SimulatorViewController: UIGestureRecognizerDelegate {
+    @objc func stopSimulation() {
+        guard let navigationController = navigationController else { return }
+        navigationController.popToRootViewController(animated: true)
+    }
+    
     @objc private func handleCellSelection(at indexPath: IndexPath) {
         let human = group.humans[indexPath.section][indexPath.item]
         human.setInfected()
@@ -174,6 +205,7 @@ extension SimulatorViewController: UIGestureRecognizerDelegate {
         
         DispatchQueue.main.async {
             self.collectionView.reloadItems(at: [indexPath])
+            self.statusBar.clock()
         }
     }
     

@@ -53,13 +53,13 @@ extension Position {
             guard x < bottomRightCorner.x else { return nil }
             return Position(x: x + 1, y: y)
         case .bottomRight:
-            guard y < bottomRightCorner.y && x < bottomRightCorner.x else { return nil }
+            guard (y < bottomRightCorner.y && x < bottomRightCorner.x) || (x < residue - 1 && y == bottomRightCorner.y) else { return nil }
             return Position(x: x + 1, y: y + 1)
         case .bottom:
-            guard y < bottomRightCorner.y else { return nil }
+            guard y < bottomRightCorner.y || (x < residue && y == bottomRightCorner.y) else { return nil }
             return Position(x: x, y: y + 1)
         case .bottomLeft:
-            guard (y < bottomRightCorner.y && x > 0) else { return nil }
+            guard (y < bottomRightCorner.y && x > 0) || (x > 0 && x < residue && y == bottomRightCorner.y) else { return nil }
             return Position(x: x - 1, y: y + 1)
         case .left:
             guard x > 0 else { return nil }
