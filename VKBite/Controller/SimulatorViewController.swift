@@ -1,20 +1,24 @@
 import UIKit
 
-protocol SimulatorViewProtocol: AnyObject {
-    func start(with configuration: Configuration)
-}
-
 class SimulatorViewController: UIViewController {
     // MARK: Properties
     private let simulationQueue = DispatchQueue(label: "simulationQueue")
     private var simulationTimer: DispatchSourceTimer?
-    private var currentScale: CGFloat = 1.0
     
-    var presenter: SimulatorPresenterProtocol?
-    var configuration: Configuration?
-    
-    var group = Group(size: 0)
+    var configuration: Configuration
+    var group: Group
     var infectedHumanPositions = Set<Position>()
+    
+    // MARK: Initialize
+    init(with configuration: Configuration) {
+        self.configuration = configuration
+        self.group = Group(size: configuration.groupSize)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -27,24 +31,11 @@ class SimulatorViewController: UIViewController {
         return collectionView
     }()
     
-    // MARK: Life Cycle
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewLoaded()
         initialize()
-    }
-}
-
-// MARK: - Module
-extension SimulatorViewController: SimulatorViewProtocol {
-    func start(with configuration: Configuration) {
-        self.configuration = configuration
-        group = Group(size: configuration.groupSize)
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        
         startSimulation()
     }
 }
@@ -113,8 +104,6 @@ extension SimulatorViewController: UICollectionViewDelegate, UICollectionViewDat
 // MARK: - Simulation Methods
 private extension SimulatorViewController {
     private func startSimulation() {
-        guard let configuration = configuration else { return }
-        
         let timestampInSeconds = TimeInterval(configuration.timestamp)
 
         simulationTimer = DispatchSource.makeTimerSource(queue: simulationQueue)
@@ -128,7 +117,7 @@ private extension SimulatorViewController {
     private func concurrentUpdate() {
         DispatchQueue.global().async {
             for infectedPosition in self.infectedHumanPositions {
-                var infectionFactor = self.configuration?.infectionFactor ?? 0
+                var infectionFactor = self.configuration.infectionFactor
                 var availableNeighbors = infectedPosition.getAvailableNeighbors(bottomRightCorner: self.group.information.bottomRightCorner,
                                                                                 residue: self.group.information.residue)
                 
@@ -178,15 +167,14 @@ extension SimulatorViewController: UIGestureRecognizerDelegate {
         guard gestureRecognizer.view != nil else { return }
 
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            let scale = gestureRecognizer.scale * currentScale
+            let scale = gestureRecognizer.scale * 1.0
             let scaledTransform = CGAffineTransform(scaleX: scale, y: scale)
             
             if scale <= 2.0, scale >= 0.8 {
                 collectionView.transform = scaledTransform
             }
         } else if gestureRecognizer.state == .ended {
-            currentScale = 1.0
-            let scaledTransform = CGAffineTransform(scaleX: currentScale, y: currentScale)
+            let scaledTransform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             
             UIView.animate(withDuration: 0.15) {
                 self.collectionView.transform = scaledTransform

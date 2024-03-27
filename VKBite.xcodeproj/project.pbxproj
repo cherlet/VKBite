@@ -14,14 +14,8 @@
 		07B981B92BB2E3BA0022E146 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07B981B72BB2E3BA0022E146 /* LaunchScreen.storyboard */; };
 		07B981C62BB2E8040022E146 /* Human.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981C52BB2E8040022E146 /* Human.swift */; };
 		07B981C82BB2E89A0022E146 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981C72BB2E89A0022E146 /* Configuration.swift */; };
-		07B981CF2BB2E9910022E146 /* HomeModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CA2BB2E9910022E146 /* HomeModuleBuilder.swift */; };
-		07B981D02BB2E9910022E146 /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CB2BB2E9910022E146 /* HomePresenter.swift */; };
-		07B981D12BB2E9910022E146 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CC2BB2E9910022E146 /* HomeRouter.swift */; };
 		07B981D22BB2E9910022E146 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981CD2BB2E9910022E146 /* HomeViewController.swift */; };
 		07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D52BB2F2150022E146 /* UITextField.extension.swift */; };
-		07B981DD2BB2FEA50022E146 /* SimulatorModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */; };
-		07B981DE2BB2FEA50022E146 /* SimulatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */; };
-		07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */; };
 		07B981E02BB2FEA50022E146 /* SimulatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */; };
 		07B981E42BB304FA0022E146 /* HumanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981E32BB304FA0022E146 /* HumanCell.swift */; };
 		07B981E62BB307560022E146 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B981E52BB307560022E146 /* Group.swift */; };
@@ -38,14 +32,8 @@
 		07B981BA2BB2E3BA0022E146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07B981C52BB2E8040022E146 /* Human.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Human.swift; sourceTree = "<group>"; };
 		07B981C72BB2E89A0022E146 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		07B981CA2BB2E9910022E146 /* HomeModuleBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModuleBuilder.swift; sourceTree = "<group>"; };
-		07B981CB2BB2E9910022E146 /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
-		07B981CC2BB2E9910022E146 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		07B981CD2BB2E9910022E146 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		07B981D52BB2F2150022E146 /* UITextField.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.extension.swift; sourceTree = "<group>"; };
-		07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorModuleBuilder.swift; sourceTree = "<group>"; };
-		07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorPresenter.swift; sourceTree = "<group>"; };
-		07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorRouter.swift; sourceTree = "<group>"; };
 		07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorViewController.swift; sourceTree = "<group>"; };
 		07B981E32BB304FA0022E146 /* HumanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanCell.swift; sourceTree = "<group>"; };
 		07B981E52BB307560022E146 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -63,6 +51,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0767E39B2BB45B7600337215 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				07B981CD2BB2E9910022E146 /* HomeViewController.swift */,
+				07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		07B981A02BB2E3B80022E146 = {
 			isa = PBXGroup;
 			children = (
@@ -82,10 +79,9 @@
 		07B981AB2BB2E3B80022E146 /* VKBite */ = {
 			isa = PBXGroup;
 			children = (
-				07B981D72BB2FE790022E146 /* Simulator */,
-				07B981C92BB2E9780022E146 /* Home */,
-				07B981E22BB304D80022E146 /* View */,
 				07B981C22BB2E5080022E146 /* Model */,
+				07B981E22BB304D80022E146 /* View */,
+				0767E39B2BB45B7600337215 /* Controller */,
 				07B981D42BB2F1FA0022E146 /* Extensions */,
 				07B981C02BB2E4E60022E146 /* Application */,
 				07B981C12BB2E4FC0022E146 /* Recources */,
@@ -123,17 +119,6 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		07B981C92BB2E9780022E146 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				07B981CA2BB2E9910022E146 /* HomeModuleBuilder.swift */,
-				07B981CB2BB2E9910022E146 /* HomePresenter.swift */,
-				07B981CC2BB2E9910022E146 /* HomeRouter.swift */,
-				07B981CD2BB2E9910022E146 /* HomeViewController.swift */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
 		07B981D42BB2F1FA0022E146 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,17 +126,6 @@
 				0767E3772BB4522300337215 /* Set.extension.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		07B981D72BB2FE790022E146 /* Simulator */ = {
-			isa = PBXGroup;
-			children = (
-				07B981D82BB2FEA50022E146 /* SimulatorModuleBuilder.swift */,
-				07B981D92BB2FEA50022E146 /* SimulatorPresenter.swift */,
-				07B981DA2BB2FEA50022E146 /* SimulatorRouter.swift */,
-				07B981DB2BB2FEA50022E146 /* SimulatorViewController.swift */,
-			);
-			path = Simulator;
 			sourceTree = "<group>";
 		};
 		07B981E22BB304D80022E146 /* View */ = {
@@ -232,21 +206,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07B981D02BB2E9910022E146 /* HomePresenter.swift in Sources */,
 				0767E3782BB4522300337215 /* Set.extension.swift in Sources */,
-				07B981DF2BB2FEA50022E146 /* SimulatorRouter.swift in Sources */,
 				07B981D62BB2F2150022E146 /* UITextField.extension.swift in Sources */,
 				07B981E62BB307560022E146 /* Group.swift in Sources */,
-				07B981CF2BB2E9910022E146 /* HomeModuleBuilder.swift in Sources */,
 				07B981C82BB2E89A0022E146 /* Configuration.swift in Sources */,
 				07FF4F992BB35D7A003ED9A4 /* Position.swift in Sources */,
 				07B981E42BB304FA0022E146 /* HumanCell.swift in Sources */,
-				07B981DD2BB2FEA50022E146 /* SimulatorModuleBuilder.swift in Sources */,
 				07B981AD2BB2E3B80022E146 /* AppDelegate.swift in Sources */,
 				07B981D22BB2E9910022E146 /* HomeViewController.swift in Sources */,
 				07B981E02BB2FEA50022E146 /* SimulatorViewController.swift in Sources */,
-				07B981DE2BB2FEA50022E146 /* SimulatorPresenter.swift in Sources */,
-				07B981D12BB2E9910022E146 /* HomeRouter.swift in Sources */,
 				07B981AF2BB2E3B80022E146 /* SceneDelegate.swift in Sources */,
 				07B981C62BB2E8040022E146 /* Human.swift in Sources */,
 			);

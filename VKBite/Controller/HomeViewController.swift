@@ -4,7 +4,6 @@ protocol HomeViewProtocol: AnyObject {}
 
 class HomeViewController: UIViewController, HomeViewProtocol {
     // MARK: Properties
-    var presenter: HomePresenterProtocol?
     let defaultConfiguration = Configuration(groupSize: 100, infectionFactor: 3, timestamp: 1)
 
     // MARK: UI Elements
@@ -156,6 +155,15 @@ private extension HomeViewController {
         
         let configuration = Configuration(groupSize: groupSize, infectionFactor: infectionFactor, timestamp: timestamp)
         
-        presenter?.didSetting(with: configuration)
+        openSimulator(with: configuration)
+    }
+}
+
+// MARK: - Routing
+private extension HomeViewController {
+    func openSimulator(with configuration: Configuration) {
+        guard let navigationController = self.navigationController else { return }
+        let simulatorController = SimulatorViewController(with: configuration)
+        navigationController.pushViewController(simulatorController, animated: true)
     }
 }
